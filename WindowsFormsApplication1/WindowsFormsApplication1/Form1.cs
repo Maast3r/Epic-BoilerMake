@@ -26,9 +26,9 @@ namespace WindowsFormsApplication1 {
             String DOB = DOBForm.Text;
             String gender = "";
             if (maleButton.Checked){
-                gender = "male";
+                gender = "m";
             } else if (femaleButton.Checked){
-                gender = "female";
+                gender = "f";
             }
             String address = AddressForm.Text != null ? AddressForm.Text : "";
             String phone = PhoneForm.Text != null ? PhoneForm.Text : "";
