@@ -25,7 +25,7 @@ namespace WindowsFormsApplication1
             this.phoneNumbers = phoneNumbers;
         }
 
-        public static Patient findPatient(string firstName, string lastName, DateTime birthDate, string streetAddress, string gender, string phoneNumber)
+        public static Patient findPatient(string firstName, string lastName, string birthDate, string streetAddress, string gender, string phoneNumber)
         {
             List<Tuple<string, string>> stringParams = generateParamsList(firstName, lastName, birthDate, streetAddress, gender, phoneNumber);
 
@@ -62,18 +62,24 @@ namespace WindowsFormsApplication1
             List<string> phoneNumbers = new List<string>();
             foreach (dynamic phoneJson in json.telecom)
             {
-                phoneNumbers.Add((string) phoneJson.value["@value"]);
+                if (phoneJson.system["@value"] == "phone")
+                {
+                    phoneNumbers.Add((string)phoneJson.value["@value"]);
+                }
             }
             return new Patient(name, birthDate, streetAddress, phoneNumbers);
         }
 
-        private static List<Tuple<string, string>> generateParamsList(string firstName, string lastName, DateTime birthDate, string streetAddress, string gender, string phoneNumber)
+        private static List<Tuple<string, string>> generateParamsList(string firstName, string lastName, string birthDate, string streetAddress, string gender, string phoneNumber)
         {
             List<Tuple<string, string>> stringParams = new List<Tuple<string, string>>();
             stringParams.Add(tuple("given", firstName));
             stringParams.Add(tuple("family", lastName));
 
-            //stringParams.Add(tuple("birthdate", birthDate.ToShortDateString()));
+            if (birthDate != "")
+            {
+                stringParams.Add(tuple("birthdate", birthDate));
+            }
             if (streetAddress != "")
             {
                 stringParams.Add(tuple("address", streetAddress));
@@ -92,6 +98,11 @@ namespace WindowsFormsApplication1
         private static Tuple<string, string> tuple(string paramName, string paramValue)
         {
             return new Tuple<string, string>(paramName, paramValue);
+        }
+
+        public string toString()
+        {
+            return "name:  " + name + "\nbirthDate: " + this.birthDate.ToShortDateString() + "\nstreetAddress: " + this.streetAddress + "\nphoneNumbers: " + string.Join<string>(", ", this.phoneNumbers);
         }
     }
 }
