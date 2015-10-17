@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Xml;
-using RestSharp;
-using RestSharp.Deserializers;
-using Newtonsoft.Json;
 using System.Windows.Forms;
 
 namespace WindowsFormsApplication1
@@ -15,7 +11,6 @@ namespace WindowsFormsApplication1
             Console.WriteLine("Starting test");
             Console.WriteLine("");
             startTest();
-            System.Threading.Thread.Sleep(500);
             Console.WriteLine("");
             Console.WriteLine("Ended test");
             Application.Exit();
@@ -23,8 +18,8 @@ namespace WindowsFormsApplication1
 
         public void startTest()
         {
-            Patient patient = Patient.findPatient("Jason", "Argonaut", new DateTime(0), "", "", "");
-            Console.WriteLine(patient);
+            Patient patient = Patient.findPatient("Jason", "Argonaut", "", "", "", "");
+            Console.WriteLine(patient.toString());
             //var client = new RestClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
             //client.ClearHandlers();
             //client.AddHandler("application/xml", new XmlDeserializer());
