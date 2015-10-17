@@ -47,5 +47,14 @@ namespace WindowsFormsApplication1
             file.Close();
             return patients;
         }
+
+        public static void saveAllPatients(List<Patient> patients)
+        {
+            createFile();
+            foreach (Patient patient in patients)
+            {
+                writePatientToStorage(patient);
+            }
+        }
     }
 }

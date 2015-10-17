@@ -38,20 +38,22 @@ namespace WindowsFormsApplication1
 
             //FileStorage.writePatientToStorage(patient);
 
-            List<Patient> patients = FileStorage.readFile();
-            Console.WriteLine("");
-
             //patient = Patient.findPatient("Phil", "Hermes", "", "", "", "");
             //Console.WriteLine(patient.toString());
             //perscriptions = Perscription.findPerscriptions(patient.getId());
             //perscriptions.ForEach(perscription => Console.WriteLine(perscription.toString() + "\n\n" + "*****" + "\n"));
+
+            //FileStorage.writePatientToStorage(patient);
 
             //patient = Patient.findPatient("Athena", "Pallas", "", "", "", "");
             //Console.WriteLine(patient.toString());
             //perscriptions = Perscription.findPerscriptions(patient.getId());
             //perscriptions.ForEach(perscription => Console.WriteLine(perscription.toString() + "\n\n" + "*****" + "\n"));
 
+            //FileStorage.writePatientToStorage(patient);
 
+            List<Patient> patients = FileStorage.readFile();
+            FileStorage.saveAllPatients(patients);
             //Console.WriteLine("\n********\n");
             //Console.WriteLine(patient.toString());
         }
