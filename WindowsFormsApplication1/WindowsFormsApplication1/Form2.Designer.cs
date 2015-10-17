@@ -29,16 +29,16 @@
         private void InitializeComponent()
         {
             this.perscriptionBox = new System.Windows.Forms.GroupBox();
-            this.drugNameLabel = new System.Windows.Forms.Label();
-            this.drugPillDescriptionLabel = new System.Windows.Forms.Label();
-            this.drugInstructionLabel = new System.Windows.Forms.Label();
-            this.drugDoseLabel = new System.Windows.Forms.Label();
-            this.drugTimesInfoLabel = new System.Windows.Forms.Label();
-            this.drugTime1Label = new System.Windows.Forms.Label();
-            this.drugTime2Label = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.drugUpdateReminderTimeButton = new System.Windows.Forms.Button();
             this.drugIGotARefillButton = new System.Windows.Forms.Button();
+            this.drugUpdateReminderTimeButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.drugTime2Label = new System.Windows.Forms.Label();
+            this.drugTime1Label = new System.Windows.Forms.Label();
+            this.drugTimesInfoLabel = new System.Windows.Forms.Label();
+            this.drugDoseLabel = new System.Windows.Forms.Label();
+            this.drugInstructionLabel = new System.Windows.Forms.Label();
+            this.drugPillDescriptionLabel = new System.Windows.Forms.Label();
+            this.drugNameLabel = new System.Windows.Forms.Label();
             this.perscriptionBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,36 +60,69 @@
             this.perscriptionBox.TabIndex = 0;
             this.perscriptionBox.TabStop = false;
             // 
-            // drugNameLabel
+            // drugIGotARefillButton
             // 
-            this.drugNameLabel.AutoSize = true;
-            this.drugNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drugNameLabel.Location = new System.Drawing.Point(32, 38);
-            this.drugNameLabel.Name = "drugNameLabel";
-            this.drugNameLabel.Size = new System.Drawing.Size(100, 29);
-            this.drugNameLabel.TabIndex = 0;
-            this.drugNameLabel.Text = "Vikodin";
+            this.drugIGotARefillButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(185)))), ((int)(((byte)(87)))));
+            this.drugIGotARefillButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drugIGotARefillButton.ForeColor = System.Drawing.Color.White;
+            this.drugIGotARefillButton.Location = new System.Drawing.Point(606, 170);
+            this.drugIGotARefillButton.Name = "drugIGotARefillButton";
+            this.drugIGotARefillButton.Size = new System.Drawing.Size(122, 38);
+            this.drugIGotARefillButton.TabIndex = 9;
+            this.drugIGotARefillButton.Text = "I got a refill";
+            this.drugIGotARefillButton.UseVisualStyleBackColor = false;
             // 
-            // drugPillDescriptionLabel
+            // drugUpdateReminderTimeButton
             // 
-            this.drugPillDescriptionLabel.AutoSize = true;
-            this.drugPillDescriptionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.drugPillDescriptionLabel.Location = new System.Drawing.Point(138, 43);
-            this.drugPillDescriptionLabel.Name = "drugPillDescriptionLabel";
-            this.drugPillDescriptionLabel.Size = new System.Drawing.Size(196, 22);
-            this.drugPillDescriptionLabel.TabIndex = 1;
-            this.drugPillDescriptionLabel.Text = "( 21/40 pills remaining )";
+            this.drugUpdateReminderTimeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(172)))), ((int)(((byte)(67)))));
+            this.drugUpdateReminderTimeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drugUpdateReminderTimeButton.ForeColor = System.Drawing.Color.White;
+            this.drugUpdateReminderTimeButton.Location = new System.Drawing.Point(606, 43);
+            this.drugUpdateReminderTimeButton.Name = "drugUpdateReminderTimeButton";
+            this.drugUpdateReminderTimeButton.Size = new System.Drawing.Size(122, 118);
+            this.drugUpdateReminderTimeButton.TabIndex = 8;
+            this.drugUpdateReminderTimeButton.Text = "Update Reminder Times and Information";
+            this.drugUpdateReminderTimeButton.UseVisualStyleBackColor = false;
             // 
-            // drugInstructionLabel
+            // label1
             // 
-            this.drugInstructionLabel.AutoSize = true;
-            this.drugInstructionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.drugInstructionLabel.Location = new System.Drawing.Point(37, 83);
-            this.drugInstructionLabel.Name = "drugInstructionLabel";
-            this.drugInstructionLabel.Size = new System.Drawing.Size(494, 25);
-            this.drugInstructionLabel.TabIndex = 2;
-            this.drugInstructionLabel.Text = "Instructions: Take 2 tablets (80 mg total) by mouth daily.";
-            this.drugInstructionLabel.Click += new System.EventHandler(this.drugDescriptionLabel_Click);
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(37, 268);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(345, 25);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "You will need more pills by 11/18/2015";
+            // 
+            // drugTime2Label
+            // 
+            this.drugTime2Label.AutoSize = true;
+            this.drugTime2Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drugTime2Label.Location = new System.Drawing.Point(187, 209);
+            this.drugTime2Label.Name = "drugTime2Label";
+            this.drugTime2Label.Size = new System.Drawing.Size(93, 25);
+            this.drugTime2Label.TabIndex = 6;
+            this.drugTime2Label.Text = "4:00 p.m.";
+            // 
+            // drugTime1Label
+            // 
+            this.drugTime1Label.AutoSize = true;
+            this.drugTime1Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drugTime1Label.Location = new System.Drawing.Point(38, 209);
+            this.drugTime1Label.Name = "drugTime1Label";
+            this.drugTime1Label.Size = new System.Drawing.Size(93, 25);
+            this.drugTime1Label.TabIndex = 5;
+            this.drugTime1Label.Text = "8:30 a.m.";
+            // 
+            // drugTimesInfoLabel
+            // 
+            this.drugTimesInfoLabel.AutoSize = true;
+            this.drugTimesInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drugTimesInfoLabel.Location = new System.Drawing.Point(38, 170);
+            this.drugTimesInfoLabel.Name = "drugTimesInfoLabel";
+            this.drugTimesInfoLabel.Size = new System.Drawing.Size(331, 25);
+            this.drugTimesInfoLabel.TabIndex = 4;
+            this.drugTimesInfoLabel.Text = "Times when Cortana will remind you:";
             // 
             // drugDoseLabel
             // 
@@ -102,69 +135,36 @@
             this.drugDoseLabel.Text = "Dose: 80 mg";
             this.drugDoseLabel.Click += new System.EventHandler(this.drugDoseLabel_Click);
             // 
-            // drugTimesInfoLabel
+            // drugInstructionLabel
             // 
-            this.drugTimesInfoLabel.AutoSize = true;
-            this.drugTimesInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drugTimesInfoLabel.Location = new System.Drawing.Point(38, 170);
-            this.drugTimesInfoLabel.Name = "drugTimesInfoLabel";
-            this.drugTimesInfoLabel.Size = new System.Drawing.Size(331, 25);
-            this.drugTimesInfoLabel.TabIndex = 4;
-            this.drugTimesInfoLabel.Text = "Times when Cortana will remind you:";
+            this.drugInstructionLabel.AutoSize = true;
+            this.drugInstructionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.drugInstructionLabel.Location = new System.Drawing.Point(37, 83);
+            this.drugInstructionLabel.Name = "drugInstructionLabel";
+            this.drugInstructionLabel.Size = new System.Drawing.Size(494, 25);
+            this.drugInstructionLabel.TabIndex = 2;
+            this.drugInstructionLabel.Text = "Instructions: Take 2 tablets (80 mg total) by mouth daily.";
+            this.drugInstructionLabel.Click += new System.EventHandler(this.drugDescriptionLabel_Click);
             // 
-            // drugTime1Label
+            // drugPillDescriptionLabel
             // 
-            this.drugTime1Label.AutoSize = true;
-            this.drugTime1Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drugTime1Label.Location = new System.Drawing.Point(38, 209);
-            this.drugTime1Label.Name = "drugTime1Label";
-            this.drugTime1Label.Size = new System.Drawing.Size(93, 25);
-            this.drugTime1Label.TabIndex = 5;
-            this.drugTime1Label.Text = "8:30 a.m.";
+            this.drugPillDescriptionLabel.AutoSize = true;
+            this.drugPillDescriptionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.drugPillDescriptionLabel.Location = new System.Drawing.Point(138, 43);
+            this.drugPillDescriptionLabel.Name = "drugPillDescriptionLabel";
+            this.drugPillDescriptionLabel.Size = new System.Drawing.Size(196, 22);
+            this.drugPillDescriptionLabel.TabIndex = 1;
+            this.drugPillDescriptionLabel.Text = "( 21/40 pills remaining )";
             // 
-            // drugTime2Label
+            // drugNameLabel
             // 
-            this.drugTime2Label.AutoSize = true;
-            this.drugTime2Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drugTime2Label.Location = new System.Drawing.Point(187, 209);
-            this.drugTime2Label.Name = "drugTime2Label";
-            this.drugTime2Label.Size = new System.Drawing.Size(93, 25);
-            this.drugTime2Label.TabIndex = 6;
-            this.drugTime2Label.Text = "4:00 p.m.";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(37, 268);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(345, 25);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "You will need more pills by 11/18/2015";
-            // 
-            // drugUpdateReminderTimeButton
-            // 
-            this.drugUpdateReminderTimeButton.BackColor = System.Drawing.Color.Orange;
-            this.drugUpdateReminderTimeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drugUpdateReminderTimeButton.ForeColor = System.Drawing.Color.White;
-            this.drugUpdateReminderTimeButton.Location = new System.Drawing.Point(606, 43);
-            this.drugUpdateReminderTimeButton.Name = "drugUpdateReminderTimeButton";
-            this.drugUpdateReminderTimeButton.Size = new System.Drawing.Size(122, 118);
-            this.drugUpdateReminderTimeButton.TabIndex = 8;
-            this.drugUpdateReminderTimeButton.Text = "Update Reminder Times and Information";
-            this.drugUpdateReminderTimeButton.UseVisualStyleBackColor = false;
-            // 
-            // drugIGotARefillButton
-            // 
-            this.drugIGotARefillButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(185)))), ((int)(((byte)(87)))));
-            this.drugIGotARefillButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drugIGotARefillButton.ForeColor = System.Drawing.Color.White;
-            this.drugIGotARefillButton.Location = new System.Drawing.Point(606, 170);
-            this.drugIGotARefillButton.Name = "drugIGotARefillButton";
-            this.drugIGotARefillButton.Size = new System.Drawing.Size(122, 38);
-            this.drugIGotARefillButton.TabIndex = 9;
-            this.drugIGotARefillButton.Text = "I got a refill";
-            this.drugIGotARefillButton.UseVisualStyleBackColor = false;
+            this.drugNameLabel.AutoSize = true;
+            this.drugNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drugNameLabel.Location = new System.Drawing.Point(32, 38);
+            this.drugNameLabel.Name = "drugNameLabel";
+            this.drugNameLabel.Size = new System.Drawing.Size(100, 29);
+            this.drugNameLabel.TabIndex = 0;
+            this.drugNameLabel.Text = "Vikodin";
             // 
             // Form2
             // 

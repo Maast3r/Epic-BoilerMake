@@ -40,9 +40,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.firstNameForm = new System.Windows.Forms.TextBox();
             this.AddressForm = new System.Windows.Forms.TextBox();
-            this.DOBForm = new System.Windows.Forms.TextBox();
             this.lastNameForm = new System.Windows.Forms.TextBox();
             this.PhoneForm = new System.Windows.Forms.TextBox();
+            this.DOBForm = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
             // 
             // confirmButton
@@ -111,9 +111,9 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.label3.Location = new System.Drawing.Point(52, 266);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(347, 32);
+            this.label3.Size = new System.Drawing.Size(172, 32);
             this.label3.TabIndex = 12;
-            this.label3.Text = "Date of Birth (dd/mm/yyyy)";
+            this.label3.Text = "Date of Birth";
             // 
             // label4
             // 
@@ -148,9 +148,10 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(414, 27);
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 26F);
+            this.label7.Location = new System.Drawing.Point(283, 25);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(128, 20);
+            this.label7.Size = new System.Drawing.Size(407, 59);
             this.label7.TabIndex = 16;
             this.label7.Text = "Your Information";
             // 
@@ -170,14 +171,6 @@
             this.AddressForm.Size = new System.Drawing.Size(341, 39);
             this.AddressForm.TabIndex = 19;
             // 
-            // DOBForm
-            // 
-            this.DOBForm.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.DOBForm.Location = new System.Drawing.Point(58, 301);
-            this.DOBForm.Name = "DOBForm";
-            this.DOBForm.Size = new System.Drawing.Size(341, 39);
-            this.DOBForm.TabIndex = 20;
-            // 
             // lastNameForm
             // 
             this.lastNameForm.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
@@ -194,14 +187,22 @@
             this.PhoneForm.Size = new System.Drawing.Size(341, 39);
             this.PhoneForm.TabIndex = 22;
             // 
+            // DOBForm
+            // 
+            this.DOBForm.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.DOBForm.Location = new System.Drawing.Point(58, 311);
+            this.DOBForm.Name = "DOBForm";
+            this.DOBForm.Size = new System.Drawing.Size(341, 39);
+            this.DOBForm.TabIndex = 23;
+            // 
             // GenderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(958, 764);
+            this.Controls.Add(this.DOBForm);
             this.Controls.Add(this.PhoneForm);
             this.Controls.Add(this.lastNameForm);
-            this.Controls.Add(this.DOBForm);
             this.Controls.Add(this.AddressForm);
             this.Controls.Add(this.firstNameForm);
             this.Controls.Add(this.label7);
@@ -236,9 +237,9 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox firstNameForm;
         private System.Windows.Forms.TextBox AddressForm;
-        private System.Windows.Forms.TextBox DOBForm;
         private System.Windows.Forms.TextBox lastNameForm;
         private System.Windows.Forms.TextBox PhoneForm;
+        private System.Windows.Forms.DateTimePicker DOBForm;
     }
 }
 

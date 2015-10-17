@@ -20,15 +20,26 @@ namespace WindowsFormsApplication1 {
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
+
             String firstName = firstNameForm.Text;
             String lastName = lastNameForm.Text;
             String DOB = DOBForm.Text;
-            String gender = maleButton.Checked ? "male" : "female";
+            String gender = "";
+            if (maleButton.Checked){
+                gender = "male";
+            } else if (femaleButton.Checked){
+                gender = "female";
+            }
             String address = AddressForm.Text;
             String phone = PhoneForm.Text;
+            // create json herish idk somewhere
+            this.Hide();
+            var secondForm = new Form2(phone);
+            secondForm.Closed += (s, args) => this.Close();
+            secondForm.Show();
+
             //sendRequest();
-            MessageBox.Show("Hello World "  + firstName + " " + lastName + " " + DOB + " " + gender + " " + address + " " + phone);
+            //MessageBox.Show("Hello World "  + firstName + " " + lastName + " " + DOB + " " + gender + " " + address + " " + phone);
         }
 
         private void label1_Click(object sender, EventArgs e) {
