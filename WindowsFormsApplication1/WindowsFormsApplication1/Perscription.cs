@@ -86,23 +86,6 @@ namespace WindowsFormsApplication1
 
         }
 
-        private static Perscription getPerscriptionFromId(RestClient client, string id)
-        {
-            var request = new RestRequest("MedicationPrescription/" + id);
-
-            request.RequestFormat = DataFormat.Xml;
-
-            IRestResponse response = client.Execute(request);
-            var content = response.Content;
-
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(content);
-            string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
-            dynamic json = JsonConvert.DeserializeObject(jsonString);
-
-            return null;
-        }
-
         private static Perscription getPerscriptionFromJson(dynamic json)
         {
             string medication = json.medication.display["@value"];
