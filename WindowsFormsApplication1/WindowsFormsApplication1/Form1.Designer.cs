@@ -42,7 +42,7 @@
             this.AddressForm = new System.Windows.Forms.TextBox();
             this.lastNameForm = new System.Windows.Forms.TextBox();
             this.PhoneForm = new System.Windows.Forms.TextBox();
-            this.DOBForm = new System.Windows.Forms.DateTimePicker();
+            this.DOBForm = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // confirmButton
@@ -111,9 +111,9 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.label3.Location = new System.Drawing.Point(52, 266);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(172, 32);
+            this.label3.Size = new System.Drawing.Size(347, 32);
             this.label3.TabIndex = 12;
-            this.label3.Text = "Date of Birth";
+            this.label3.Text = "Date of Birth (dd/mm/yyyy)";
             // 
             // label4
             // 
@@ -190,9 +190,9 @@
             // DOBForm
             // 
             this.DOBForm.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.DOBForm.Location = new System.Drawing.Point(58, 311);
+            this.DOBForm.Location = new System.Drawing.Point(58, 304);
             this.DOBForm.Name = "DOBForm";
-            this.DOBForm.Size = new System.Drawing.Size(341, 39);
+            this.DOBForm.Size = new System.Drawing.Size(323, 39);
             this.DOBForm.TabIndex = 23;
             // 
             // GenderForm
@@ -239,7 +239,7 @@
         private System.Windows.Forms.TextBox AddressForm;
         private System.Windows.Forms.TextBox lastNameForm;
         private System.Windows.Forms.TextBox PhoneForm;
-        private System.Windows.Forms.DateTimePicker DOBForm;
+        private System.Windows.Forms.TextBox DOBForm;
     }
 }
 
