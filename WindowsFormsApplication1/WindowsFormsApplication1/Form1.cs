@@ -19,7 +19,7 @@ namespace WindowsFormsApplication1
         //why
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            new EpicTest();
         }
     }
 }
