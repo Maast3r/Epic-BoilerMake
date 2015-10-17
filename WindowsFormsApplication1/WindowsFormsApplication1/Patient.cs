@@ -59,7 +59,7 @@ namespace WindowsFormsApplication1
             doc.LoadXml(content);
             string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
             dynamic json = (dynamic) JsonConvert.DeserializeObject(jsonString);
-
+            // if there are multiple users, pick one functionality goes here
             string id = json.Bundle.entry.link.url["@value"];
             id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Patient/", "");
             json = json.Bundle.entry.resource.Patient;

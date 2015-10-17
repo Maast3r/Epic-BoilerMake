@@ -162,6 +162,20 @@ namespace WindowsFormsApplication1
             return new Perscription(id, medication, numberOfRefills, expectedSupplyDurationValue, expectedSupplyDurationUnit,
                 quantityRemaining, dosageInstruction, asNeeded, timingPeriod, timingPeriodUnit);
         }
+
+        public void getARefill(bool keepOldPills)
+        {
+            int refillAmount = (int) (this.expectedSupplyDurationValue / this.timingPeriod);
+            if (keepOldPills)
+            {
+                this.quantityRemaining += refillAmount;
+            } else
+            {
+                this.quantityRemaining = refillAmount;
+            }
+            this.numberOfRefills--;
+        }
+
         public string toString()
         {
             return "medication: " + this.medication + "\nnumberOfRefills: " + this.numberOfRefills + "\nexpectedSupplyDurationValue: " +

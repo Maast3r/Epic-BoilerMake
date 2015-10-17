@@ -53,7 +53,12 @@ namespace WindowsFormsApplication1
             //FileStorage.writePatientToStorage(patient);
 
             List<Patient> patients = FileStorage.readFile();
-            FileStorage.saveAllPatients(patients);
+            //FileStorage.saveAllPatients(patients);
+            Perscription perscription = patients.ElementAt(0).getPerscriptions().ElementAt(0);
+            perscription.getARefill(true);
+            FileStorage.updatePerscription(perscription);
+
+
             //Console.WriteLine("\n********\n");
             //Console.WriteLine(patient.toString());
         }

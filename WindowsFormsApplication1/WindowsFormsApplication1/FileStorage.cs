@@ -48,6 +48,7 @@ namespace WindowsFormsApplication1
             return patients;
         }
 
+        // This will overright the existing storeage.
         public static void saveAllPatients(List<Patient> patients)
         {
             createFile();
@@ -56,5 +57,23 @@ namespace WindowsFormsApplication1
                 writePatientToStorage(patient);
             }
         }
+
+        public static void updatePerscription(Perscription perscription)
+        {
+            List<Patient> patients = readFile();
+            foreach (Patient patient in patients)
+            {
+                List<Perscription> perscriptions = patient.getPerscriptions();
+                for (int k=0; k<perscriptions.Count; k++)
+                {
+                    if (perscriptions.ElementAt(k).getId() == perscription.getId())
+                    {
+                        perscriptions.RemoveAt(k);
+                        perscriptions.Insert(k, perscription);
+                    }
+                }
+            }
+            saveAllPatients(patients);
+        } 
     }
 }
