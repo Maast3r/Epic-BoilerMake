@@ -120,17 +120,25 @@ namespace WindowsFormsApplication1
 
         public string toString()
         {
-            return "id: " + this.id + "\nname:  " + this.name + "\nbirthDate: " + this.birthDate.ToShortDateString() + "\nstreetAddress: " + this.streetAddress + "\nphoneNumbers: " + string.Join<string>(", ", this.phoneNumbers);
+            return "id: " + this.id + "\nname:  " + this.name + "\nbirthDate: " + 
+                this.birthDate.ToShortDateString() + "\nstreetAddress: " + this.streetAddress + 
+                "\nphoneNumbers: " + string.Join<string>(", ", this.phoneNumbers) + 
+                "\nNumber of perscriptions: " + this.perscriptions.Count;
         }
 
         public string toJson()
         {
             JsonSerializerSettings jss = new JsonSerializerSettings();
-
             Newtonsoft.Json.Serialization.DefaultContractResolver dcr = new Newtonsoft.Json.Serialization.DefaultContractResolver();
             dcr.DefaultMembersSearchFlags |= System.Reflection.BindingFlags.NonPublic;
             jss.ContractResolver = dcr;
             return JsonConvert.SerializeObject(this, jss);
+        }
+
+        public static Patient fromJson(string json)
+        {
+            return JsonConvert.DeserializeObject<Patient>(json);
+
         }
     }
 }

@@ -29,7 +29,7 @@ namespace WindowsFormsApplication1
             string json = patient.toJson();
             Console.WriteLine(json);
 
-            dynamic newPatient = JsonConvert.DeserializeObject<Patient>(json);
+            Patient newPatient = Patient.fromJson(json);
             Console.WriteLine(newPatient.toString());
 
             //Patient patient;
