@@ -20,6 +20,9 @@ namespace WindowsFormsApplication1
         {
             Patient patient = Patient.findPatient("Jason", "Argonaut", "", "", "", "");
             Console.WriteLine(patient.toString());
+            Console.WriteLine("\n********\n");
+            patient = Patient.findPatient("Apollo", "Minyan", "", "", "", "");
+            Console.WriteLine(patient.toString());
             //var client = new RestClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
             //client.ClearHandlers();
             //client.AddHandler("application/xml", new XmlDeserializer());

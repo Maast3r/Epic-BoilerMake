@@ -12,13 +12,15 @@ namespace WindowsFormsApplication1
 {
     class Patient
     {
+        private string id;
         private string name;
         private DateTime birthDate;
         private string streetAddress;
         private List<string> phoneNumbers;
 
-        public Patient(string name, DateTime birthDate, string streetAddress, List<string> phoneNumbers)
+        public Patient(string id, string name, DateTime birthDate, string streetAddress, List<string> phoneNumbers)
         {
+            this.id = id;
             this.name = name;
             this.birthDate = birthDate;
             this.streetAddress = streetAddress;
@@ -49,18 +51,20 @@ namespace WindowsFormsApplication1
             string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
             dynamic json = JsonConvert.DeserializeObject(jsonString);
             // TODO convert to support multiple results, ask epic
+            string id = json.Bundle.entry.link.url["@value"];
+            id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Patient/", "");
             json = json.Bundle.entry.resource.Patient;
             //Console.WriteLine(json);
-            return createPatientFromJson(json);
+            return createPatientFromJson(json, id);
         }
 
-        private static Patient createPatientFromJson(dynamic json)
+        private static Patient createPatientFromJson(dynamic json, string id)
         {
             string name = json.name.given["@value"] + " " + json.name.family["@value"];
             DateTime birthDate = (DateTime) json.birthDate["@value"];
             string streetAddress = json.address.line["@value"];
             List<string> phoneNumbers = new List<string>();
-            if (json.telecom != null)
+            if (json.telecom != null && json.telecom.Type == null)
             {
                 if (json.telecom.system["@value"] == "phone")
                 {
@@ -77,7 +81,7 @@ namespace WindowsFormsApplication1
                     }
                 }
             }
-            return new Patient(name, birthDate, streetAddress, phoneNumbers);
+            return new Patient(id, name, birthDate, streetAddress, phoneNumbers);
         }
 
         private static List<Tuple<string, string>> generateParamsList(string firstName, string lastName, string birthDate, string streetAddress, string gender, string phoneNumber)
@@ -112,7 +116,7 @@ namespace WindowsFormsApplication1
 
         public string toString()
         {
-            return "name:  " + name + "\nbirthDate: " + this.birthDate.ToShortDateString() + "\nstreetAddress: " + this.streetAddress + "\nphoneNumbers: " + string.Join<string>(", ", this.phoneNumbers);
+            return "id: " + this.id + "\nname:  " + this.name + "\nbirthDate: " + this.birthDate.ToShortDateString() + "\nstreetAddress: " + this.streetAddress + "\nphoneNumbers: " + string.Join<string>(", ", this.phoneNumbers);
         }
     }
 }
