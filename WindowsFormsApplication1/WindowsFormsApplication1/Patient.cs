@@ -60,11 +60,21 @@ namespace WindowsFormsApplication1
             DateTime birthDate = (DateTime) json.birthDate["@value"];
             string streetAddress = json.address.line["@value"];
             List<string> phoneNumbers = new List<string>();
-            foreach (dynamic phoneJson in json.telecom)
+            if (json.telecom != null)
             {
-                if (phoneJson.system["@value"] == "phone")
+                if (json.telecom.system["@value"] == "phone")
                 {
-                    phoneNumbers.Add((string)phoneJson.value["@value"]);
+                    phoneNumbers.Add((string)json.telecom.value["@value"]);
+                }
+            }
+            else
+            {
+                foreach (dynamic phoneJson in json.telecom)
+                {
+                    if (phoneJson.system["@value"] == "phone")
+                    {
+                        phoneNumbers.Add((string)phoneJson.value["@value"]);
+                    }
                 }
             }
             return new Patient(name, birthDate, streetAddress, phoneNumbers);
