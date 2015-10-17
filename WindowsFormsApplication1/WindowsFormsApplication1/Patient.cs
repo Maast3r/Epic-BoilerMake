@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Newtonsoft.Json;
 using RestSharp;
+using RestSharp.Deserializers;
 
 namespace WindowsFormsApplication1
 {
@@ -14,15 +15,13 @@ namespace WindowsFormsApplication1
         private string name;
         private DateTime birthDate;
         private string streetAddress;
-        private string gender;
-        private int[] phoneNumbers;
+        private List<string> phoneNumbers;
 
-        public Patient(string name, DateTime birthDate, string streetAddress, string gender, int[] phoneNumbers)
+        public Patient(string name, DateTime birthDate, string streetAddress, List<string> phoneNumbers)
         {
             this.name = name;
             this.birthDate = birthDate;
             this.streetAddress = streetAddress;
-            this.gender = gender;
             this.phoneNumbers = phoneNumbers;
         }
 
@@ -49,10 +48,23 @@ namespace WindowsFormsApplication1
             doc.LoadXml(content);
             string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
             dynamic json = JsonConvert.DeserializeObject(jsonString);
-            json = json.Patient;
+            // TODO convert to support multiple results, ask epic
+            json = json.Bundle.entry.resource.Patient;
+            //Console.WriteLine(json);
+            return createPatientFromJson(json);
+        }
 
-            // create patient
-
+        private static Patient createPatientFromJson(dynamic json)
+        {
+            string name = json.name.given["@value"] + " " + json.name.family["@value"];
+            DateTime birthDate = (DateTime) json.birthDate["@value"];
+            string streetAddress = json.address.line["@value"];
+            List<string> phoneNumbers = new List<string>();
+            foreach (dynamic phoneJson in json.telecom)
+            {
+                phoneNumbers.Add((string) phoneJson.value["@value"]);
+            }
+            return new Patient(name, birthDate, streetAddress, phoneNumbers);
         }
 
         private static List<Tuple<string, string>> generateParamsList(string firstName, string lastName, DateTime birthDate, string streetAddress, string gender, string phoneNumber)
@@ -61,7 +73,7 @@ namespace WindowsFormsApplication1
             stringParams.Add(tuple("given", firstName));
             stringParams.Add(tuple("family", lastName));
 
-            stringParams.Add(tuple("birthdate", birthDate.ToShortDateString()));
+            //stringParams.Add(tuple("birthdate", birthDate.ToShortDateString()));
             if (streetAddress != "")
             {
                 stringParams.Add(tuple("address", streetAddress));
