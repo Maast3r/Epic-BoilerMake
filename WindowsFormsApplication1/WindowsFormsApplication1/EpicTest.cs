@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace WindowsFormsApplication1
@@ -20,7 +22,8 @@ namespace WindowsFormsApplication1
         {
             Patient patient = Patient.findPatient("Jason", "Argonaut", "", "", "", "");
 
-            Perscription.findPerscriptions(patient.getId());
+            List<Perscription> perscriptions = Perscription.findPerscriptions(patient.getId());
+            perscriptions.ForEach(perscription => Console.WriteLine(perscription.toString() + "\n\n" + "*****" + "\n") );
             //Console.WriteLine(patient.toString());
             //Console.WriteLine("\n********\n");
             //patient = Patient.findPatient("Apollo", "Minyan", "", "", "", "");

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using Newtonsoft.Json;
 using RestSharp;
@@ -40,12 +37,17 @@ namespace WindowsFormsApplication1
 
         public static List<Perscription> findPerscriptions(string patientId)
         {
+            List<Perscription> perscriptions = new List<Perscription>();
+
             var client = new RestClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
             client.ClearHandlers();
             client.AddHandler("application/xml", new XmlDeserializer());
             client.AddHandler("text/xml", new XmlDeserializer());
 
-            var request = new RestRequest("Patient");
+            var request = new RestRequest("MedicationPrescription");
+            request.AddParameter("patient", patientId);
+            request.AddParameter("status", "active");
+
             request.RequestFormat = DataFormat.Xml;
 
             IRestResponse response = client.Execute(request);
@@ -56,11 +58,37 @@ namespace WindowsFormsApplication1
             string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
             dynamic json = JsonConvert.DeserializeObject(jsonString);
 
-            Console.WriteLine(json);
+            json = json.Bundle.entry.resource;
+            Perscription perscription = getPerscriptionFromJson(json.MedicationPrescription);
 
-            return null;
+            perscriptions.Add(perscription);
+            return perscriptions;
 
         }
 
+        private static Perscription getPerscriptionFromJson(dynamic json)
+        {
+            string medication = json.medication.display["@value"];
+            int numberOfRefills = int.Parse((string)json.dispense.numberOfRepeatsAllowed["@value"]);
+            double expectedSupplyDurationValue = double.Parse((string)json.dispense.expectedSupplyDuration.value["@value"]);
+            string expectedSupplyDurationUnit = json.dispense.expectedSupplyDuration.units["@value"];
+
+            int quantityRemaining = int.Parse((string)json.dispense.quantity.value["@value"]);
+            string dosageInstruction = json.dosageInstruction.text["@value"];
+            bool asNeeded = bool.Parse((string)json.dosageInstruction.asNeededBoolean["@value"]);
+
+            double timingPeriod = double.Parse((string)json.dosageInstruction.scheduledTiming.repeat.period["@value"]);
+            string timingPeriodUnit = json.dosageInstruction.scheduledTiming.repeat.periodUnits["@value"];
+
+            return new Perscription(medication, numberOfRefills, expectedSupplyDurationValue, expectedSupplyDurationUnit,
+                quantityRemaining, dosageInstruction, asNeeded, timingPeriod, timingPeriodUnit);
+        }
+        public string toString()
+        {
+            return "medication: " + this.medication + "\nnumberOfRefills: " + this.numberOfRefills + "\nexpectedSupplyDurationValue: " +
+                this.expectedSupplyDurationValue + " " + this.expectedSupplyDurationUnit +
+                "\nquantityRemaining: " + this.quantityRemaining + "\ndosageInstruction: " + this.dosageInstruction + 
+                "\nasNeeded: " + this.asNeeded + "\ntimingPeriod: " + this.timingPeriod + " " + this.timingPeriodUnit;
+        }
     }
 }
