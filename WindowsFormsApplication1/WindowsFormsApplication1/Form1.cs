@@ -8,17 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1
-{
-    public partial class GenderForm : Form
-    {
-        public GenderForm()
-        {
+namespace WindowsFormsApplication1 {
+    public partial class GenderForm : Form {
+        public GenderForm() {
             InitializeComponent();
         }
         //why
-        private void Form1_Load(object sender, EventArgs e)
-        {
+        private void Form1_Load(object sender, EventArgs e) {
 
         }
 
@@ -31,21 +27,19 @@ namespace WindowsFormsApplication1
             String gender = maleButton.Checked ? "male" : "female";
             String address = AddressForm.Text;
             String phone = PhoneForm.Text;
+            //sendRequest();
             MessageBox.Show("Hello World "  + firstName + " " + lastName + " " + DOB + " " + gender + " " + address + " " + phone);
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
+        private void label1_Click(object sender, EventArgs e) {
 
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
+        private void label2_Click(object sender, EventArgs e)  {
 
         }
 
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-                    }
+        private void textBox3_TextChanged(object sender, EventArgs e) {
+        }
     }
 }
