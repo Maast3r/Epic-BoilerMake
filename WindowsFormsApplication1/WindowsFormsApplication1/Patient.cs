@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using Newtonsoft.Json;
 using RestSharp;
@@ -17,6 +14,7 @@ namespace WindowsFormsApplication1
         private DateTime birthDate;
         private string streetAddress;
         private List<string> phoneNumbers;
+        private List<Perscription> perscriptions;
 
         public Patient(string id, string name, DateTime birthDate, string streetAddress, List<string> phoneNumbers)
         {
@@ -25,6 +23,12 @@ namespace WindowsFormsApplication1
             this.birthDate = birthDate;
             this.streetAddress = streetAddress;
             this.phoneNumbers = phoneNumbers;
+            this.perscriptions = Perscription.findPerscriptions(this.id);
+        }
+
+        public string getId()
+        {
+            return this.id;
         }
 
         public static Patient findPatient(string firstName, string lastName, string birthDate, string streetAddress, string gender, string phoneNumber)
@@ -49,15 +53,15 @@ namespace WindowsFormsApplication1
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(content);
             string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
-            dynamic json = JsonConvert.DeserializeObject(jsonString);
-            // TODO convert to support multiple results, ask epic
+            dynamic json = (dynamic) JsonConvert.DeserializeObject(jsonString);
+
             string id = json.Bundle.entry.link.url["@value"];
             id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Patient/", "");
             json = json.Bundle.entry.resource.Patient;
             //Console.WriteLine(json);
             return createPatientFromJson(json, id);
         }
-
+        
         private static Patient createPatientFromJson(dynamic json, string id)
         {
             string name = json.name.given["@value"] + " " + json.name.family["@value"];
