@@ -16,19 +16,24 @@ namespace WindowsFormsApplication1
         private List<string> phoneNumbers;
         private List<Perscription> perscriptions;
 
-        public Patient(string id, string name, DateTime birthDate, string streetAddress, List<string> phoneNumbers)
+        public Patient(string id, string name, DateTime birthDate, string streetAddress, List<string> phoneNumbers, List<Perscription> perscriptions)
         {
             this.id = id;
             this.name = name;
             this.birthDate = birthDate;
             this.streetAddress = streetAddress;
             this.phoneNumbers = phoneNumbers;
-            this.perscriptions = Perscription.findPerscriptions(this.id);
+            this.perscriptions = perscriptions != null ? perscriptions : Perscription.findPerscriptions(this.id);
         }
 
         public string getId()
         {
             return this.id;
+        }
+
+        public List<Perscription> getPerscriptions()
+        {
+            return this.perscriptions;
         }
 
         public static Patient findPatient(string firstName, string lastName, string birthDate, string streetAddress, string gender, string phoneNumber)
@@ -85,7 +90,7 @@ namespace WindowsFormsApplication1
                     }
                 }
             }
-            return new Patient(id, name, birthDate, streetAddress, phoneNumbers);
+            return new Patient(id, name, birthDate, streetAddress, phoneNumbers, null);
         }
 
         private static List<Tuple<string, string>> generateParamsList(string firstName, string lastName, string birthDate, string streetAddress, string gender, string phoneNumber)

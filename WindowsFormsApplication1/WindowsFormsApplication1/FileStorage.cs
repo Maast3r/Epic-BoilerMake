@@ -33,7 +33,16 @@ namespace WindowsFormsApplication1
             string line;
             while ((line = file.ReadLine()) != null)
             {
-                patients.Add(Patient.fromJson(line));
+                Patient filePatient = Patient.fromJson(line);
+                foreach (Perscription perscription in filePatient.getPerscriptions())
+                {
+                    Perscription epicPerscription = Perscription.getPerscriptionFromId(perscription.getId());
+                    if (perscription.changed(epicPerscription))
+                    {
+                        perscription.copy(epicPerscription);
+                    }
+                }
+                patients.Add(filePatient);
             }
             file.Close();
             return patients;

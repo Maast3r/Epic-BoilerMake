@@ -26,8 +26,8 @@ namespace WindowsFormsApplication1
             //List<Perscription> perscriptions = Perscription.findPerscriptions(patient.getId());
             //perscriptions.ForEach(perscription => Console.WriteLine(perscription.toString() + "\n\n" + "*****" + "\n"));
 
-            //string json = patient.toJson();
-            //Console.WriteLine(json);
+            ////string json = patient.toJson();
+            ////Console.WriteLine(json);
             //FileStorage.createFile();
             //FileStorage.writePatientToStorage(patient);
 
@@ -36,7 +36,7 @@ namespace WindowsFormsApplication1
             //perscriptions = Perscription.findPerscriptions(patient.getId());
             //perscriptions.ForEach(perscription => Console.WriteLine(perscription.toString() + "\n\n" + "*****" + "\n"));
 
-            //FileStorage.writePatientToStorage(patient)
+            //FileStorage.writePatientToStorage(patient);
 
             List<Patient> patients = FileStorage.readFile();
             Console.WriteLine("");

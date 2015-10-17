@@ -9,6 +9,7 @@ namespace WindowsFormsApplication1
 {
     class Perscription
     {
+        private string id;
         private string medication;
         private int numberOfRefills;
         private double expectedSupplyDurationValue;
@@ -21,9 +22,10 @@ namespace WindowsFormsApplication1
         private double timingPeriod;
         private string timingPeriodUnit;
 
-        public Perscription(string medication, int numberOfRefills, double expectedSupplyDurationValue, string expectedSupplyDurationUnit,
+        public Perscription(string id, string medication, int numberOfRefills, double expectedSupplyDurationValue, string expectedSupplyDurationUnit,
             int quantityRemaining, string dosageInstruction, bool asNeeded, double timingPeriod, string timingPeriodUnit)
         {
+            this.id = id;
             this.medication = medication;
             this.numberOfRefills = numberOfRefills;
             this.expectedSupplyDurationValue = expectedSupplyDurationValue;
@@ -33,6 +35,61 @@ namespace WindowsFormsApplication1
             this.asNeeded = asNeeded;
             this.timingPeriod = timingPeriod;
             this.timingPeriodUnit = timingPeriodUnit;
+        }
+        // returns true if you need to get a new perscription object from epic
+        public bool changed(Perscription other)
+        {
+            return this.medication != other.medication || this.numberOfRefills != other.numberOfRefills ||
+                this.expectedSupplyDurationValue != other.expectedSupplyDurationValue ||
+                this.expectedSupplyDurationUnit != other.expectedSupplyDurationUnit ||
+                this.dosageInstruction != other.dosageInstruction ||
+                this.asNeeded != other.asNeeded || this.timingPeriod != other.timingPeriod ||
+                this.timingPeriodUnit != other.timingPeriodUnit;
+        }
+
+        public void copy(Perscription other)
+        {
+            this.id = other.id;
+            this.medication = other.medication;
+            this.numberOfRefills = other.numberOfRefills;
+            this.expectedSupplyDurationValue = other.expectedSupplyDurationValue;
+            this.expectedSupplyDurationUnit = other.expectedSupplyDurationUnit;
+            this.quantityRemaining = other.quantityRemaining;
+            this.dosageInstruction = other.dosageInstruction;
+            this.asNeeded = other.asNeeded;
+            this.timingPeriod = other.timingPeriod;
+            this.timingPeriodUnit = other.timingPeriodUnit;
+        }
+
+        public string getId()
+        {
+            return this.id;
+        }
+        internal static Perscription getPerscriptionFromId(string id)
+        {
+            var client = new RestClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
+            client.ClearHandlers();
+            client.AddHandler("application/xml", new XmlDeserializer());
+            client.AddHandler("text/xml", new XmlDeserializer());
+
+            var request = new RestRequest("MedicationPrescription/" + id);
+
+            request.RequestFormat = DataFormat.Xml;
+
+            IRestResponse response = client.Execute(request);
+            var content = response.Content;
+            Console.WriteLine(client.BuildUri(request));
+            //if (content == "")
+            //{
+            //    return perscriptions;
+            //}
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(content);
+            string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
+            dynamic json = JsonConvert.DeserializeObject(jsonString);
+
+            return getPerscriptionFromJson(json.MedicationPrescription, id);
         }
 
         public static List<Perscription> findPerscriptions(string patientId)
@@ -69,16 +126,17 @@ namespace WindowsFormsApplication1
                 {
                     foreach (dynamic perscriptionJson in json)
                     {
-                        //string id = perscriptionJson.link.url["@value"];
-                        //id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/MedicationPrescription/", "");
-                        //Perscription perscription = getPerscriptionFromId(client, id);
-                        Perscription perscription = getPerscriptionFromJson(perscriptionJson.resource.MedicationPrescription);
+                        string id = perscriptionJson.link.url["@value"];
+                        id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/MedicationPrescription/", "");
+                        Perscription perscription = getPerscriptionFromJson(perscriptionJson.resource.MedicationPrescription, id);
                         perscriptions.Add(perscription);
                     }
                 }
                 else
                 {
-                    Perscription perscription = getPerscriptionFromJson(json.resource.MedicationPrescription);
+                    string id = json.link.url["@value"];
+                    id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/MedicationPrescription/", "");
+                    Perscription perscription = getPerscriptionFromJson(json.resource.MedicationPrescription, id);
                     perscriptions.Add(perscription);
                 }
             }
@@ -86,7 +144,7 @@ namespace WindowsFormsApplication1
 
         }
 
-        private static Perscription getPerscriptionFromJson(dynamic json)
+        private static Perscription getPerscriptionFromJson(dynamic json, string id)
         {
             string medication = json.medication.display["@value"];
             Console.WriteLine(medication);
@@ -101,7 +159,7 @@ namespace WindowsFormsApplication1
             double timingPeriod = double.Parse((string)json.dosageInstruction.scheduledTiming.repeat.period["@value"]);
             string timingPeriodUnit = json.dosageInstruction.scheduledTiming.repeat.periodUnits["@value"];
 
-            return new Perscription(medication, numberOfRefills, expectedSupplyDurationValue, expectedSupplyDurationUnit,
+            return new Perscription(id, medication, numberOfRefills, expectedSupplyDurationValue, expectedSupplyDurationUnit,
                 quantityRemaining, dosageInstruction, asNeeded, timingPeriod, timingPeriodUnit);
         }
         public string toString()
