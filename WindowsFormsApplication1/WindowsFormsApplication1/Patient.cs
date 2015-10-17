@@ -122,5 +122,15 @@ namespace WindowsFormsApplication1
         {
             return "id: " + this.id + "\nname:  " + this.name + "\nbirthDate: " + this.birthDate.ToShortDateString() + "\nstreetAddress: " + this.streetAddress + "\nphoneNumbers: " + string.Join<string>(", ", this.phoneNumbers);
         }
+
+        public string toJson()
+        {
+            JsonSerializerSettings jss = new JsonSerializerSettings();
+
+            Newtonsoft.Json.Serialization.DefaultContractResolver dcr = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+            dcr.DefaultMembersSearchFlags |= System.Reflection.BindingFlags.NonPublic;
+            jss.ContractResolver = dcr;
+            return JsonConvert.SerializeObject(this, jss);
+        }
     }
 }

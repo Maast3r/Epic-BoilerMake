@@ -52,23 +52,61 @@ namespace WindowsFormsApplication1
 
             IRestResponse response = client.Execute(request);
             var content = response.Content;
+            if (content == "")
+            {
+                return perscriptions;
+            }
 
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(content);
             string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
             dynamic json = JsonConvert.DeserializeObject(jsonString);
 
-            json = json.Bundle.entry.resource;
-            Perscription perscription = getPerscriptionFromJson(json.MedicationPrescription);
-
-            perscriptions.Add(perscription);
+            json = json.Bundle.entry;
+            if (json != null)
+            {
+                if (json.Count > 1)
+                {
+                    foreach (dynamic perscriptionJson in json)
+                    {
+                        //string id = perscriptionJson.link.url["@value"];
+                        //id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/MedicationPrescription/", "");
+                        //Perscription perscription = getPerscriptionFromId(client, id);
+                        Perscription perscription = getPerscriptionFromJson(perscriptionJson.resource.MedicationPrescription);
+                        perscriptions.Add(perscription);
+                    }
+                }
+                else
+                {
+                    Perscription perscription = getPerscriptionFromJson(json.resource.MedicationPrescription);
+                    perscriptions.Add(perscription);
+                }
+            }
             return perscriptions;
 
+        }
+
+        private static Perscription getPerscriptionFromId(RestClient client, string id)
+        {
+            var request = new RestRequest("MedicationPrescription/" + id);
+
+            request.RequestFormat = DataFormat.Xml;
+
+            IRestResponse response = client.Execute(request);
+            var content = response.Content;
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(content);
+            string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
+            dynamic json = JsonConvert.DeserializeObject(jsonString);
+
+            return null;
         }
 
         private static Perscription getPerscriptionFromJson(dynamic json)
         {
             string medication = json.medication.display["@value"];
+            Console.WriteLine(medication);
             int numberOfRefills = int.Parse((string)json.dispense.numberOfRepeatsAllowed["@value"]);
             double expectedSupplyDurationValue = double.Parse((string)json.dispense.expectedSupplyDuration.value["@value"]);
             string expectedSupplyDurationUnit = json.dispense.expectedSupplyDuration.units["@value"];
