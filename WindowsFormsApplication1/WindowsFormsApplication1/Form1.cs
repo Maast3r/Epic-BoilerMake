@@ -38,6 +38,7 @@ namespace WindowsFormsApplication1 {
             secondForm.Closed += (s, args) => this.Close();
             secondForm.Show();
 
+            Console.WriteLine(Patient.findPatient(firstName, lastName, DOB, address, gender, phone));
             //sendRequest();
             //MessageBox.Show("Hello World "  + firstName + " " + lastName + " " + DOB + " " + gender + " " + address + " " + phone);
         }
