@@ -30,8 +30,8 @@ namespace WindowsFormsApplication1 {
             } else if (femaleButton.Checked){
                 gender = "female";
             }
-            String address = AddressForm.Text;
-            String phone = PhoneForm.Text;
+            String address = AddressForm.Text != null ? AddressForm.Text : "";
+            String phone = PhoneForm.Text != null ? PhoneForm.Text : "";
             // create json herish idk somewhere
             this.Hide();
             var secondForm = new Form2(phone);
