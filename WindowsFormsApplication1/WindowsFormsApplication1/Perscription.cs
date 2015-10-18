@@ -76,6 +76,13 @@ namespace WindowsFormsApplication1
             return this.reminders;
         }
 
+        public DateTime getMustRefillDate()
+        {
+            double daysLeft = this.quantityRemaining * this.timingPeriod;
+            DateTime today = DateTime.Today;
+            return today.AddDays(daysLeft);
+        }
+
         internal static Perscription getPerscriptionFromId(string id)
         {
             var client = new RestClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");

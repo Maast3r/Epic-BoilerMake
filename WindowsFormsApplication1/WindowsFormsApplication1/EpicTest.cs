@@ -56,7 +56,8 @@ namespace WindowsFormsApplication1
             //FileStorage.saveAllPatients(patients);
             Perscription perscription = patients.ElementAt(0).getPerscriptions().ElementAt(0);
             //perscription.getARefill(true);
-            perscription.takeAPill();
+            //perscription.takeAPill();
+            Console.WriteLine(perscription.getMustRefillDate());
 
 
             //Console.WriteLine("\n********\n");
