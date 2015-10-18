@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using Newtonsoft.Json;
 using RestSharp;
@@ -12,17 +9,31 @@ namespace WindowsFormsApplication1
 {
     class Patient
     {
+        private string id;
         private string name;
         private DateTime birthDate;
         private string streetAddress;
         private List<string> phoneNumbers;
+        private List<Perscription> perscriptions;
 
-        public Patient(string name, DateTime birthDate, string streetAddress, List<string> phoneNumbers)
+        public Patient(string id, string name, DateTime birthDate, string streetAddress, List<string> phoneNumbers, List<Perscription> perscriptions)
         {
+            this.id = id;
             this.name = name;
             this.birthDate = birthDate;
             this.streetAddress = streetAddress;
             this.phoneNumbers = phoneNumbers;
+            this.perscriptions = perscriptions != null ? perscriptions : Perscription.findPerscriptions(this.id);
+        }
+
+        public string getId()
+        {
+            return this.id;
+        }
+
+        public List<Perscription> getPerscriptions()
+        {
+            return this.perscriptions;
         }
 
         public static Patient findPatient(string firstName, string lastName, string birthDate, string streetAddress, string gender, string phoneNumber)
@@ -47,20 +58,21 @@ namespace WindowsFormsApplication1
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(content);
             string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
-            dynamic json = JsonConvert.DeserializeObject(jsonString);
-            // TODO convert to support multiple results, ask epic
+            dynamic json = (dynamic) JsonConvert.DeserializeObject(jsonString);
+            // if there are multiple users, pick one functionality goes here
+            string id = json.Bundle.entry.link.url["@value"];
+            id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Patient/", "");
             json = json.Bundle.entry.resource.Patient;
-            //Console.WriteLine(json);
-            return createPatientFromJson(json);
+            return createPatientFromJson(json, id);
         }
-
-        private static Patient createPatientFromJson(dynamic json)
+        
+        private static Patient createPatientFromJson(dynamic json, string id)
         {
             string name = json.name.given["@value"] + " " + json.name.family["@value"];
             DateTime birthDate = (DateTime) json.birthDate["@value"];
             string streetAddress = json.address.line["@value"];
             List<string> phoneNumbers = new List<string>();
-            if (json.telecom != null)
+            if (json.telecom != null && json.telecom.Type == null)
             {
                 if (json.telecom.system["@value"] == "phone")
                 {
@@ -77,7 +89,7 @@ namespace WindowsFormsApplication1
                     }
                 }
             }
-            return new Patient(name, birthDate, streetAddress, phoneNumbers);
+            return new Patient(id, name, birthDate, streetAddress, phoneNumbers, null);
         }
 
         private static List<Tuple<string, string>> generateParamsList(string firstName, string lastName, string birthDate, string streetAddress, string gender, string phoneNumber)
@@ -112,7 +124,25 @@ namespace WindowsFormsApplication1
 
         public string toString()
         {
-            return "name:  " + name + "\nbirthDate: " + this.birthDate.ToShortDateString() + "\nstreetAddress: " + this.streetAddress + "\nphoneNumbers: " + string.Join<string>(", ", this.phoneNumbers);
+            return "id: " + this.id + "\nname:  " + this.name + "\nbirthDate: " + 
+                this.birthDate.ToShortDateString() + "\nstreetAddress: " + this.streetAddress + 
+                "\nphoneNumbers: " + string.Join<string>(", ", this.phoneNumbers) + 
+                "\nNumber of perscriptions: " + this.perscriptions.Count;
+        }
+
+        public string toJson()
+        {
+            JsonSerializerSettings jss = new JsonSerializerSettings();
+            Newtonsoft.Json.Serialization.DefaultContractResolver dcr = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+            dcr.DefaultMembersSearchFlags |= System.Reflection.BindingFlags.NonPublic;
+            jss.ContractResolver = dcr;
+            return JsonConvert.SerializeObject(this, jss);
+        }
+
+        public static Patient fromJson(string json)
+        {
+            return JsonConvert.DeserializeObject<Patient>(json);
+
         }
     }
 }
