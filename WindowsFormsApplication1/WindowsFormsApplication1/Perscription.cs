@@ -22,8 +22,10 @@ namespace WindowsFormsApplication1
         private double timingPeriod;
         private string timingPeriodUnit;
 
+        private List<Tuple<DateTime, string>> reminders;
+
         public Perscription(string id, string medication, int numberOfRefills, double expectedSupplyDurationValue, string expectedSupplyDurationUnit,
-            int quantityRemaining, string dosageInstruction, bool asNeeded, double timingPeriod, string timingPeriodUnit)
+            int quantityRemaining, string dosageInstruction, bool asNeeded, double timingPeriod, string timingPeriodUnit, List<Tuple<DateTime, string>> reminders)
         {
             this.id = id;
             this.medication = medication;
@@ -35,6 +37,7 @@ namespace WindowsFormsApplication1
             this.asNeeded = asNeeded;
             this.timingPeriod = timingPeriod;
             this.timingPeriodUnit = timingPeriodUnit;
+            this.reminders = reminders != null ? reminders : new List<Tuple<DateTime, string>>();
         }
         // returns true if you need to get a new perscription object from epic
         public bool changed(Perscription other)
@@ -45,6 +48,7 @@ namespace WindowsFormsApplication1
                 this.dosageInstruction != other.dosageInstruction ||
                 this.asNeeded != other.asNeeded || this.timingPeriod != other.timingPeriod ||
                 this.timingPeriodUnit != other.timingPeriodUnit;
+
         }
 
         public void copy(Perscription other)
@@ -59,12 +63,19 @@ namespace WindowsFormsApplication1
             this.asNeeded = other.asNeeded;
             this.timingPeriod = other.timingPeriod;
             this.timingPeriodUnit = other.timingPeriodUnit;
+            this.reminders = other.reminders;
         }
 
         public string getId()
         {
             return this.id;
         }
+        
+        public List<Tuple<DateTime, string>> getReminders()
+        {
+            return this.reminders;
+        }
+
         internal static Perscription getPerscriptionFromId(string id)
         {
             var client = new RestClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
@@ -160,7 +171,7 @@ namespace WindowsFormsApplication1
             string timingPeriodUnit = json.dosageInstruction.scheduledTiming.repeat.periodUnits["@value"];
 
             return new Perscription(id, medication, numberOfRefills, expectedSupplyDurationValue, expectedSupplyDurationUnit,
-                quantityRemaining, dosageInstruction, asNeeded, timingPeriod, timingPeriodUnit);
+                quantityRemaining, dosageInstruction, asNeeded, timingPeriod, timingPeriodUnit, null);
         }
 
         public bool getARefill(bool keepOldPills)

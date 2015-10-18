@@ -55,8 +55,8 @@ namespace WindowsFormsApplication1
             List<Patient> patients = FileStorage.readFile();
             //FileStorage.saveAllPatients(patients);
             Perscription perscription = patients.ElementAt(0).getPerscriptions().ElementAt(0);
-            perscription.getARefill(true);
-            FileStorage.updatePerscription(perscription);
+            //perscription.getARefill(true);
+            perscription.takeAPill();
 
 
             //Console.WriteLine("\n********\n");
