@@ -63,7 +63,6 @@ namespace WindowsFormsApplication1
             string id = json.Bundle.entry.link.url["@value"];
             id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Patient/", "");
             json = json.Bundle.entry.resource.Patient;
-            //Console.WriteLine(json);
             return createPatientFromJson(json, id);
         }
         

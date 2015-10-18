@@ -21,11 +21,11 @@ namespace WindowsFormsApplication1
 
         public void startTest()
         {
-            //Patient patient = Patient.findPatient("Jason", "Argonaut", "", "", "", "");
-            //Console.WriteLine(patient.toString() + "\n");
-            //List<Perscription> perscriptions = Perscription.findPerscriptions(patient.getId());
-            //perscriptions.ForEach(perscription => Console.WriteLine(perscription.toString() + "\n\n" + "*****" + "\n"));
-
+            Patient patient = Patient.findPatient("Jason", "Argonaut", "", "", "", "");
+            Console.WriteLine(patient.toString() + "\n");
+            List<Perscription> perscriptions = Perscription.findPerscriptions(patient.getId());
+            perscriptions.ForEach(perscription => Console.WriteLine(perscription.toString() + "\n\n" + "*****" + "\n"));
+            Console.WriteLine("");
             ////string json = patient.toJson();
             ////Console.WriteLine(json);
             //FileStorage.createFile();
@@ -52,12 +52,13 @@ namespace WindowsFormsApplication1
 
             //FileStorage.writePatientToStorage(patient);
 
-            List<Patient> patients = FileStorage.readFile();
-            //FileStorage.saveAllPatients(patients);
-            Perscription perscription = patients.ElementAt(0).getPerscriptions().ElementAt(0);
-            //perscription.getARefill(true);
-            //perscription.takeAPill();
-            Console.WriteLine(perscription.getMustRefillDate());
+            //List<Patient> patients = FileStorage.readFile();
+            ////FileStorage.saveAllPatients(patients);
+            //Perscription perscription = patients.ElementAt(0).getPerscriptions().ElementAt(0);
+            ////perscription.getARefill(true);
+            ////perscription.takeAPill();
+            //Console.WriteLine(perscription.getMustRefillDate());
+            //Console.WriteLine(perscription.getTotalNumberOfPills());
 
 
             //Console.WriteLine("\n********\n");

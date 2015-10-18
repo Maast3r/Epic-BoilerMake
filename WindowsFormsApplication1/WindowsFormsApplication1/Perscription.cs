@@ -37,8 +37,37 @@ namespace WindowsFormsApplication1
             this.asNeeded = asNeeded;
             this.timingPeriod = timingPeriod;
             this.timingPeriodUnit = timingPeriodUnit;
-            this.reminders = reminders != null ? reminders : new List<Tuple<DateTime, string>>();
+            if (reminders != null)
+            {
+                this.reminders = reminders;
+            }
+            else
+            {
+                this.reminders = new List<Tuple<DateTime, string>>();
+                if (this.timingPeriod >= 1)
+                {
+                    this.reminders.Add(new Tuple<DateTime, string>(getNextHour(8), "take " + this.medication));
+                }
+                else if (this.timingPeriod <= 0.34)
+                {
+                    this.reminders.Add(new Tuple<DateTime, string>(getNextHour(8), "take " + this.medication));
+                    this.reminders.Add(new Tuple<DateTime, string>(getNextHour(17), "take " + this.medication));
+                    this.reminders.Add(new Tuple<DateTime, string>(getNextHour(21), "take " + this.medication));
+                }
+                else
+                {
+                    this.reminders.Add(new Tuple<DateTime, string>(getNextHour(8), "take " + this.medication));
+                    this.reminders.Add(new Tuple<DateTime, string>(getNextHour(17), "take " + this.medication));
+                }
+            }
         }
+
+        private DateTime getNextHour(int hour)
+        {
+            DateTime today = DateTime.Now.Date;
+            return today.AddHours(hour).AddDays(DateTime.Now.Hour >= hour ? 1 : 0);
+        }
+
         // returns true if you need to get a new perscription object from epic
         public bool changed(Perscription other)
         {
@@ -70,7 +99,12 @@ namespace WindowsFormsApplication1
         {
             return this.id;
         }
-        
+
+        public int getTotalNumberOfPills()
+        {
+            return (int)(this.expectedSupplyDurationValue / this.timingPeriod);
+        }
+
         public List<Tuple<DateTime, string>> getReminders()
         {
             return this.reminders;
@@ -96,11 +130,6 @@ namespace WindowsFormsApplication1
 
             IRestResponse response = client.Execute(request);
             var content = response.Content;
-            Console.WriteLine(client.BuildUri(request));
-            //if (content == "")
-            //{
-            //    return perscriptions;
-            //}
 
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(content);
@@ -165,7 +194,6 @@ namespace WindowsFormsApplication1
         private static Perscription getPerscriptionFromJson(dynamic json, string id)
         {
             string medication = json.medication.display["@value"];
-            Console.WriteLine(medication);
             int numberOfRefills = int.Parse((string)json.dispense.numberOfRepeatsAllowed["@value"]);
             double expectedSupplyDurationValue = double.Parse((string)json.dispense.expectedSupplyDuration.value["@value"]);
             string expectedSupplyDurationUnit = json.dispense.expectedSupplyDuration.units["@value"];
