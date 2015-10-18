@@ -1,41 +1,50 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-namespace App1
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApplication1
 {
     class FileStorage
     {
-        public static readonly string filePath = Directory.GetCurrentDirectory() + "\\storage.txt";
+        public static readonly string filePath = Path.GetDirectoryName(Application.ExecutablePath) + "storage.txt";
 
 
         public static void writePatientToStorage(Patient patient)
         {
-            File.AppendAllLines(filePath, new string[] { patient.toJson() });
+            StreamWriter file = new StreamWriter(filePath, true);
+            file.WriteLine(patient.toJson());
+            file.Close();
         }
 
         public static void createFile()
         {
-            File.Create(filePath);
+            Console.WriteLine(filePath);
+            new StreamWriter(filePath).Close();
         }
 
         public static List<Patient> readFile()
         {
             List<Patient> patients = new List<Patient>();
-            var blah = filePath;
-            string[] lines = File.ReadAllLines(filePath);
-            foreach (string line in lines)
+            StreamReader file = new StreamReader(filePath);
+            string line;
+            while ((line = file.ReadLine()) != null)
             {
                 Patient filePatient = Patient.fromJson(line);
                 foreach (Perscription perscription in filePatient.getPerscriptions())
                 {
                     Perscription epicPerscription = Perscription.getPerscriptionFromId(perscription.getId());
-                    //if (perscription.changed(epicPerscription))
-                    //{
-                    //    perscription.copy(epicPerscription);
-                    //}
+                    if (perscription.changed(epicPerscription))
+                    {
+                        perscription.copy(epicPerscription);
+                    }
                 }
                 patients.Add(filePatient);
             }
+            file.Close();
             return patients;
         }
 
@@ -55,9 +64,9 @@ namespace App1
             foreach (Patient patient in patients)
             {
                 List<Perscription> perscriptions = patient.getPerscriptions();
-                for (int k = 0; k < perscriptions.Count; k++)
+                for (int k=0; k<perscriptions.Count; k++)
                 {
-                    if (perscriptions[k].getId() == perscription.getId())
+                    if (perscriptions.ElementAt(k).getId() == perscription.getId())
                     {
                         perscriptions.RemoveAt(k);
                         perscriptions.Insert(k, perscription);
@@ -65,6 +74,6 @@ namespace App1
                 }
             }
             saveAllPatients(patients);
-        }
+        } 
     }
 }

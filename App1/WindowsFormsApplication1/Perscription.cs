@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using Newtonsoft.Json;
+using RestSharp;
+using RestSharp.Deserializers;
 
-namespace App1
+namespace WindowsFormsApplication1
 {
     class Perscription
     {
@@ -116,79 +119,75 @@ namespace App1
 
         internal static Perscription getPerscriptionFromId(string id)
         {
-            // dones't work
-            return null;
-            //var client = new RestClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
-            //client.ClearHandlers();
-            //client.AddHandler("application/xml", new XmlDeserializer());
-            //client.AddHandler("text/xml", new XmlDeserializer());
+            var client = new RestClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
+            client.ClearHandlers();
+            client.AddHandler("application/xml", new XmlDeserializer());
+            client.AddHandler("text/xml", new XmlDeserializer());
 
-            //var request = new RestRequest("MedicationPrescription/" + id);
+            var request = new RestRequest("MedicationPrescription/" + id);
 
-            //request.RequestFormat = DataFormat.Xml;
+            request.RequestFormat = DataFormat.Xml;
 
-            //IRestResponse response = client.Execute(request);
-            //var content = response.Content;
+            IRestResponse response = client.Execute(request);
+            var content = response.Content;
 
-            //XmlDocument doc = new XmlDocument();
-            //doc.LoadXml(content);
-            //string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
-            //dynamic json = JsonConvert.DeserializeObject(jsonString);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(content);
+            string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
+            dynamic json = JsonConvert.DeserializeObject(jsonString);
 
-            //return getPerscriptionFromJson(json.MedicationPrescription, id);
+            return getPerscriptionFromJson(json.MedicationPrescription, id);
         }
 
         public static List<Perscription> findPerscriptions(string patientId)
         {
-            //doesn't work
-            return null;
-            //List<Perscription> perscriptions = new List<Perscription>();
+            List<Perscription> perscriptions = new List<Perscription>();
 
-            //var client = new RestClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
-            //client.ClearHandlers();
-            //client.AddHandler("application/xml", new XmlDeserializer());
-            //client.AddHandler("text/xml", new XmlDeserializer());
+            var client = new RestClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
+            client.ClearHandlers();
+            client.AddHandler("application/xml", new XmlDeserializer());
+            client.AddHandler("text/xml", new XmlDeserializer());
 
-            //var request = new RestRequest("MedicationPrescription");
-            //request.AddParameter("patient", patientId);
-            //request.AddParameter("status", "active");
+            var request = new RestRequest("MedicationPrescription");
+            request.AddParameter("patient", patientId);
+            request.AddParameter("status", "active");
 
-            //request.RequestFormat = DataFormat.Xml;
+            request.RequestFormat = DataFormat.Xml;
 
-            //IRestResponse response = client.Execute(request);
-            //var content = response.Content;
-            //if (content == "")
-            //{
-            //    return perscriptions;
-            //}
+            IRestResponse response = client.Execute(request);
+            var content = response.Content;
+            if (content == "")
+            {
+                return perscriptions;
+            }
 
-            //XmlDocument doc = new XmlDocument();
-            //doc.LoadXml(content);
-            //string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
-            //dynamic json = JsonConvert.DeserializeObject(jsonString);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(content);
+            string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
+            dynamic json = JsonConvert.DeserializeObject(jsonString);
 
-            //json = json.Bundle.entry;
-            //if (json != null)
-            //{
-            //    if (json.Count > 1)
-            //    {
-            //        foreach (dynamic perscriptionJson in json)
-            //        {
-            //            string id = perscriptionJson.link.url["@value"];
-            //            id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/MedicationPrescription/", "");
-            //            Perscription perscription = getPerscriptionFromJson(perscriptionJson.resource.MedicationPrescription, id);
-            //            perscriptions.Add(perscription);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        string id = json.link.url["@value"];
-            //        id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/MedicationPrescription/", "");
-            //        Perscription perscription = getPerscriptionFromJson(json.resource.MedicationPrescription, id);
-            //        perscriptions.Add(perscription);
-            //    }
-            //}
-            //return perscriptions;
+            json = json.Bundle.entry;
+            if (json != null)
+            {
+                if (json.Count > 1)
+                {
+                    foreach (dynamic perscriptionJson in json)
+                    {
+                        string id = perscriptionJson.link.url["@value"];
+                        id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/MedicationPrescription/", "");
+                        Perscription perscription = getPerscriptionFromJson(perscriptionJson.resource.MedicationPrescription, id);
+                        perscriptions.Add(perscription);
+                    }
+                }
+                else
+                {
+                    string id = json.link.url["@value"];
+                    id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/MedicationPrescription/", "");
+                    Perscription perscription = getPerscriptionFromJson(json.resource.MedicationPrescription, id);
+                    perscriptions.Add(perscription);
+                }
+            }
+            return perscriptions;
 
         }
 

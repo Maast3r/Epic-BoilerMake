@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Xml;
 using Newtonsoft.Json;
-using System.Net.Http.Headers;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
+using RestSharp;
+using RestSharp.Deserializers;
 
-namespace App1
+namespace WindowsFormsApplication1
 {
     class Patient
     {
@@ -37,79 +36,40 @@ namespace App1
             return this.perscriptions;
         }
 
-        private static async System.Threading.Tasks.Task<string> doRequest(HttpClient client, Uri uri)
-        {
-            HttpResponseMessage response = client.GetAsync(uri).Result;
-            return await response.Content.ReadAsStringAsync();
-        }
-
-
         public static Patient findPatient(string firstName, string lastName, string birthDate, string streetAddress, string gender, string phoneNumber)
         {
-            // donesn't work
             List<Tuple<string, string>> stringParams = generateParamsList(firstName, lastName, birthDate, streetAddress, gender, phoneNumber);
-            var client = new HttpClient();
-            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/json"));
 
-            //var client = new RestClient();
+            var client = new RestClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
+            client.ClearHandlers();
+            client.AddHandler("application/xml", new XmlDeserializer());
+            client.AddHandler("text/xml", new XmlDeserializer());
 
-            //client.ClearHandlers();
-            //client.AddHandler("application/xml", new XmlDeserializer());
-            //client.AddHandler("text/xml", new XmlDeserializer());
-
-            UriBuilder uriBuilder = new UriBuilder();
-            // https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/
-            uriBuilder.Scheme = "https";
-            uriBuilder.Host = "open-ic.epic.com";
-            uriBuilder.Path = "FHIR/api/FHIR/DSTU2/Patient";
-
-            //var request = new RestRequest("Patient");
-            //request.RequestFormat = DataFormat.Xml;
-            string queryString = "";
+            var request = new RestRequest("Patient");
+            request.RequestFormat = DataFormat.Xml;
             foreach (Tuple<string, string> param in stringParams)
             {
-                queryString = queryString + param.Item1 + "=" + param.Item2 + "&";
-                //request.AddParameter(param.Item1, param.Item2);
+                request.AddParameter(param.Item1, param.Item2);
             }
-            uriBuilder.Query = queryString.Substring(0, queryString.Length - 1);
-            Uri uri = uriBuilder.Uri;
-            string content = doRequest(client, uri).Result;
 
-            //string content = await response.Content.ReadAsStringAsync();
-            //Windows.UI.Popups.MessageDialog m = new Windows.UI.Popups.MessageDialog("Test: " + await response.Content.ReadAsStringAsync());
+            IRestResponse response = client.Execute(request);
+            var content = response.Content;
 
-            //m.ShowAsync();
-            int five = 5;
-            //IRestResponse response = client.Execute(request);
-            //var content = response.Content;
-
-            //XmlDocument doc = new XmlDocument();
-            //doc.LoadXml(content);
-
-            //string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
-            //dynamic json = (dynamic)JsonConvert.DeserializeObject(jsonString);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(content);
+            string jsonString = Newtonsoft.Json.JsonConvert.SerializeXmlNode(doc);
+            dynamic json = (dynamic) JsonConvert.DeserializeObject(jsonString);
             // if there are multiple users, pick one functionality goes here
-            //XmlToJSON(doc)
-
-            //dynamic json = JsonConvert.DeserializeObject<dynamic>(content);
-            
-
-            //JArray entry = json["Bundle"]["entry"];
-            //dynamic blah = entry.First["link"]["url"];
-            //string id = entry.link.url["@value"];
-            //string id = "";
-
-            //id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Patient/", "");
-            //json = json.Bundle.entry.resource.Patient;
-            //return createPatientFromJson(json, id);
-            return null;
+            string id = json.Bundle.entry.link.url["@value"];
+            id = id.Replace("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Patient/", "");
+            json = json.Bundle.entry.resource.Patient;
+            return createPatientFromJson(json, id);
         }
-
+        
         private static Patient createPatientFromJson(dynamic json, string id)
         {
             string name = json.name.given["@value"] + " " + json.name.family["@value"];
-            DateTime birthDate = (DateTime)json.birthDate["@value"];
+            DateTime birthDate = (DateTime) json.birthDate["@value"];
             string streetAddress = json.address.line["@value"];
             List<string> phoneNumbers = new List<string>();
             if (json.telecom != null && json.telecom.Type == null)
@@ -164,15 +124,19 @@ namespace App1
 
         public string toString()
         {
-            return "id: " + this.id + "\nname:  " + this.name + "\nbirthDate: " +
-                this.birthDate.Date + "\nstreetAddress: " + this.streetAddress +
-                "\nphoneNumbers: " + string.Join<string>(", ", this.phoneNumbers) +
+            return "id: " + this.id + "\nname:  " + this.name + "\nbirthDate: " + 
+                this.birthDate.ToShortDateString() + "\nstreetAddress: " + this.streetAddress + 
+                "\nphoneNumbers: " + string.Join<string>(", ", this.phoneNumbers) + 
                 "\nNumber of perscriptions: " + this.perscriptions.Count;
         }
 
         public string toJson()
         {
-            return JsonConvert.SerializeObject(this);
+            JsonSerializerSettings jss = new JsonSerializerSettings();
+            Newtonsoft.Json.Serialization.DefaultContractResolver dcr = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+            dcr.DefaultMembersSearchFlags |= System.Reflection.BindingFlags.NonPublic;
+            jss.ContractResolver = dcr;
+            return JsonConvert.SerializeObject(this, jss);
         }
 
         public static Patient fromJson(string json)

@@ -73,6 +73,10 @@ namespace App1
 
         private void button_Click_1(object sender, RoutedEventArgs e)
         {
+            //Patient patient = Patient.findPatient("Jason", "Argonaut", "", "", "", "");
+            List<Patient> patients = FileStorage.readFile();
+            //List<Perscription> perscriptions = Perscription.findPerscriptions(patient.getId());
+
             String firstName = firstNameForm.Text;
             String lastName = lastNameForm.Text;
             String DOB = DOBForm.Text;
