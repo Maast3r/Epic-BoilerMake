@@ -23,7 +23,7 @@ namespace App1
     partial class MainPage
     {
 
-        internal Frame rootFrame;
+        //internal Frame rootFrame;
 
 
         public MainPage()
@@ -32,7 +32,7 @@ namespace App1
 
             button.Click += new RoutedEventHandler(button_Click_1);
 
-            rootFrame = new Frame();
+            //rootFrame = new Frame();
         }
 
         private void firstNameForm_Copy2_TextChanged(object sender, TextChangedEventArgs e)
@@ -94,9 +94,9 @@ namespace App1
             //Windows.UI.Popups.MessageDialog m = new Windows.UI.Popups.MessageDialog("Test: " + firstName + " " + lastName + " " + DOB + " " + gender + " " + address + " " + phone);
 
             //m.ShowAsync();
-            rootFrame.Navigate(typeof(BlankPage1));
+            //rootFrame.Navigate(typeof(BlankPage1));
 
-            (Window.Current.Content as Frame).Navigate(typeof(BlankPage1));
+            (Window.Current.Content as Frame).Navigate(typeof(BlankPage1), "test");
         }
     }
 }

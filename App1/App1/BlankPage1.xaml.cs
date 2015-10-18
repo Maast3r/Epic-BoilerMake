@@ -23,18 +23,22 @@ namespace App1
     /// </summary>
     public partial class BlankPage1 : Page
     {
+        //internal Frame rootFrame;
         public String json;
         public BlankPage1()
         {
             this.InitializeComponent();
 
-            
+            //rootFrame = new Frame();
             makePage();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             json = e.Parameter as string;
+            Windows.UI.Popups.MessageDialog m = new Windows.UI.Popups.MessageDialog("Test: " + json);
+
+            m.ShowAsync();
         }
 
         private void makePage()
@@ -125,6 +129,8 @@ namespace App1
                 updateButton.Height = 75;
                 updateButton.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 255, 255));
                 updateButton.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 239, 172, 67));
+                updateButton.Name = "starat";
+                updateButton.Click += new RoutedEventHandler(updateDrug);
 
                 var refillButton = new Button();
                 refillButton.Content = "I got a refill";
@@ -159,14 +165,17 @@ namespace App1
                 
             }
             wrapper.Height = 375*3;
-            Windows.UI.Popups.MessageDialog m = new Windows.UI.Popups.MessageDialog("Test: " + wrapper.ActualHeight);
-
-            m.ShowAsync();
         }
 
-        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void  updateDrug(object handler, RoutedEventArgs e)
         {
+            //rootFrame.Navigate(typeof(BlankPage2));
+            String test = ((Button)handler).Name; 
+            Windows.UI.Popups.MessageDialog m = new Windows.UI.Popups.MessageDialog("Test: " + test);
 
+            m.ShowAsync();
+            (Window.Current.Content as Frame).Navigate(typeof(BlankPage2), test);
+            //throw new NotImplementedException();
         }
     }
 }
