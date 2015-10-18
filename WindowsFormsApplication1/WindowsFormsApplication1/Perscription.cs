@@ -163,24 +163,42 @@ namespace WindowsFormsApplication1
                 quantityRemaining, dosageInstruction, asNeeded, timingPeriod, timingPeriodUnit);
         }
 
-        public void getARefill(bool keepOldPills)
+        public bool getARefill(bool keepOldPills)
         {
-            int refillAmount = (int) (this.expectedSupplyDurationValue / this.timingPeriod);
+            if (this.numberOfRefills <= 0)
+            {
+                return false;
+            }
+            int refillAmount = (int)(this.expectedSupplyDurationValue / this.timingPeriod);
             if (keepOldPills)
             {
                 this.quantityRemaining += refillAmount;
-            } else
+            }
+            else
             {
                 this.quantityRemaining = refillAmount;
             }
             this.numberOfRefills--;
+            FileStorage.updatePerscription(this);
+            return true;
+        }
+
+        public bool takeAPill()
+        {
+            if (this.quantityRemaining <= 0)
+            {
+                return false;
+            }
+            this.quantityRemaining--;
+            FileStorage.updatePerscription(this);
+            return true;
         }
 
         public string toString()
         {
             return "medication: " + this.medication + "\nnumberOfRefills: " + this.numberOfRefills + "\nexpectedSupplyDurationValue: " +
                 this.expectedSupplyDurationValue + " " + this.expectedSupplyDurationUnit +
-                "\nquantityRemaining: " + this.quantityRemaining + "\ndosageInstruction: " + this.dosageInstruction + 
+                "\nquantityRemaining: " + this.quantityRemaining + "\ndosageInstruction: " + this.dosageInstruction +
                 "\nasNeeded: " + this.asNeeded + "\ntimingPeriod: " + this.timingPeriod + " " + this.timingPeriodUnit;
         }
     }
